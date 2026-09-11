@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <title>VibeSearch</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: white;
+        margin: 0;
+        padding: 10px;
+      }
+      h1 {
+color: orange:
+      }
+      #chat-container {
+        max-width: 480px;
+        margin: 20px auto;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        display: flex;
+        flex-direction: column;
+        height: 560px;
+      }
+      #messages {
+        flex: 1;
+        padding: 16px;
+        overflow-y: auto;
+        background: #fff;
+        border-bottom: 1px solid #e0e0e0;
+      }
+      .message {
+        margin: 8px 0;
+        line-height: 1.4;
+      }
+      .user-message {
+        text-align: right;
+        color: #333;
+        background: #dcf8c6;
+        padding: 8px 12px;
+        border-radius: 8px;
+        max-width: 75%;
+        align-self: flex-end;
+      }
+      .bot-message {
+        text-align: left;
+        color: #333;
+        background: #e9e9eb;
+        padding: 8px 12px;
+        border-radius: 8px;
+        max-width: 75%;
+        align-self: flex-start;
+      }
+      #input-area {
+        padding: 8px;
+        display: flex;
+        gap: 6px;
+      }
+      #user-input {
+        flex: 1;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        outline: none;
+      }
+      #send-btn {
+        padding: 8px 14px;
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+      }
+      #send-btn:hover {
+        background: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+  <h1>VibeSearch</h1>
+    <div id="chat-container">
+      <div id="messages">
+        <div class="message bot-message">Привет! Я VibeSearch. Напиши свой короткий запрос!</div>
+      </div>
+      <div id="input-area">
+        <input type="text" id="user-input" placeholder="Введите запрос..." />
+        <button id="send-btn">Искать!</button>
+      </div>
+    </div>
+
+    <script>
+      const messages = document.getElementById('messages');
+      const userInput = document.getElementById('user-input');
+      const sendBtn = document.getElementById('send-btn');
+
+      function addMessage(text, sender) {
+        const div = document.createElement('div');
+        div.classList.add('message');
+        if (sender === 'user') {
+          div.classList.add('user-message');
+          div.textContent = text;
+        } else {
+          div.classList.add('bot-message');
+          // Эмуляция небольшой задержки как у реального бота
+          div.style.opacity = '0.6';
+          div.textContent = '...';
+          messages.appendChild(div);
+          setTimeout(() => {
+            div.textContent = text;
+            div.style.opacity = '1';
+            messages.scrollTop = messages.scrollHeight;
+          }, 600);
+          return div;
+        }
+        messages.appendChild(div);
+        messages.scrollTop = messages.scrollHeight;
+        return div;
+      }
+
+      function getBotResponse(userText) {
+        const text = userText.toLowerCase().trim();
+
+        if (!text) return "Я не понял, напиши что-нибудь понятное.";
+
+        // Простые правила
+        if (text.includes('вк') || text.includes('ВКонтакте')) {
+          return "«ВКонтакте» (ВК, VK) — российская социальная сеть. Адрес: https://vk.ru";
+        }
+        if (text.includes('яндекс')) {
+          return "Яндекс Поиск — это поисковая система от Яндекса, которая помогает находить информацию в интернете: сайты, картинки, видео, новости и многое другое. Адрес: https://ya.ru";
+        }
+        if (text.includes('гугл') || text.includes('google')) {
+          return "Google — это американская технологическая компания и одноимённая поисковая система, одна из крупнейших в мире. Адрес: https://google.com";
+        }
+        if (text.includes('mail')) {
+          return "Mail.ru Почта — почтовый сервис от VK. Адрес: mail.ru. Там можно завести ящик, например, вида name@mail.ru";
+        }
+
+        // Сюда можно добавить свои правила или подключить API
+        return "Ничего не найдено";
+      }
+
+      function handleSend() {
+        const text = userInput.value;
+        if (!text.trim()) return;
+
+        addMessage(text, 'user');
+        userInput.value = '';
+
+        const botDiv = addMessage('...', 'bot');
+        setTimeout(() => {
+          const response = getBotResponse(text);
+          botDiv.textContent = response;
+          botDiv.style.opacity = '1';
+          messages.scrollTop = messages.scrollHeight;
+        }, 800);
+      }
+
+      sendBtn.addEventListener('click', handleSend);
+      userInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') handleSend();
+      });
+    </script>
+  </body>
+</html>
