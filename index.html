@@ -136,7 +136,13 @@ color: orange:
         if (text.includes('mail')) {
           return "Mail.ru Почта — почтовый сервис от VK. Адрес: mail.ru. Там можно завести ящик, например, вида name@mail.ru";
         }
-
+if (text.includes('погода')) {
+          return "Посмотреть актуальный прогноз погоды можно на https://yandex.ru/pogoda";
+                                           }
+        if (text.includes('игры')) {
+          return "Поиграть в игры можно на https://yandex.ru/games";
+        }
+        
         // Сюда можно добавить свои правила или подключить API
         return "Ничего не найдено";
       }
